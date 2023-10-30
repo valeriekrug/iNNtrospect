@@ -29,14 +29,14 @@ def compute_group_average(processed_corpus_path, layer_id, acts_from_aligned, gr
 
     return group_average
 
-def compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir):
+def compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir, use_aligned_acts):
     acts_from_aligned = False
     layer_id = "layer" + str(layer).zfill(3)
     test_activation_dir = os.path.join(processed_corpus_path, "aligned", layer_id)
-    if os.path.isdir(test_activation_dir):
+    if use_aligned_acts and os.path.isdir(test_activation_dir):
         acts_from_aligned = True
 
-    with open(os.path.join(processed_corpus_path, "group_to_file.json"), "r") as f:
+    with open(os.path.join(processed_corpus_path, "group_name_to_files.json"), "r") as f:
         group_to_file_dict = json.load(f)
     groups = [*group_to_file_dict.keys()]
 
@@ -50,14 +50,14 @@ def compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir):
     nap_file_path = os.path.join(nap_output_dir, layer_id + ".npy")
     np.save(nap_file_path, layer_naps)
 
-def compute_naps(processed_corpus_path):
+def compute_naps(processed_corpus_path, use_aligned_acts=True):
     n_layers = get_n_layers(processed_corpus_path)
 
     nap_output_dir = os.path.join(processed_corpus_path, "naps")
     makedirs([nap_output_dir])
 
     for layer in range(n_layers - 1):
-        compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir)
+        compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir, use_aligned_acts)
 
 
 

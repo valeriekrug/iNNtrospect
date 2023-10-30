@@ -70,7 +70,7 @@ def process_corpus_file(data_path, model, output_path):
         group_to_file_dict[group_name] = list(corpus[ids_of_group_files,0])
 
     with open(os.path.join(output_path,
-                           'group_to_file.json'), 'w') as f:
+                           'group_name_to_files.json'), 'w') as f:
         json.dump(group_to_file_dict, f)
 
     group_ids = np.arange(len(group_names)).astype('str')
