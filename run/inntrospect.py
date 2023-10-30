@@ -3,8 +3,8 @@
 import json
 
 from env_setup import local_env_settings
-from src.interaction import get_options_in_preprocessing_path
 from src.naps import compute_contrastive_naps
+from src.topomaps import compute_topomap_layout
 
 local_env_settings()
 
@@ -20,5 +20,10 @@ compute_contrastive_naps(config["processed_corpus_path"],
                          group_names_of_interest = group_names_of_interest,
                          weight_by_group_size = weight_by_group_size)
 
-# TODO compute topomap layouts
+compute_topomap_layout(config["processed_corpus_path"],
+                       layouting_method="tSNE",
+                       distribute_in_circle=True,
+                       from_contrastive_naps=True)
+
+
 # TODO create visualization

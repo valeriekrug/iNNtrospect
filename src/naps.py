@@ -90,13 +90,11 @@ def compute_naps(processed_corpus_path, use_aligned_acts=True):
         compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir, use_aligned_acts)
 
 
-def compute_and_save_contrastive_layer_nap(processed_corpus_path, layer, indices_of_interest, group_weights):
-    nap_output_dir = os.path.join(processed_corpus_path, "naps")
-    contrastive_nap_output_dir = os.path.join(processed_corpus_path, "contrastive_naps")
-    makedirs([contrastive_nap_output_dir])
+def compute_and_save_contrastive_layer_nap(nap_dir, output_dir, layer, indices_of_interest, group_weights):
+
 
     layer_id = "layer" + str(layer).zfill(3)
-    nap_path = os.path.join(nap_output_dir, layer_id + ".npy")
+    nap_path = os.path.join(nap_dir, layer_id + ".npy")
 
     nap = np.load(nap_path)
     nap = nap[indices_of_interest]
@@ -107,7 +105,7 @@ def compute_and_save_contrastive_layer_nap(processed_corpus_path, layer, indices
 
     nap = nap - np.expand_dims(global_average,0)
 
-    nap_file_path = os.path.join(contrastive_nap_output_dir, layer_id + ".npy")
+    nap_file_path = os.path.join(output_dir, layer_id + ".npy")
     np.save(nap_file_path, nap)
 
 def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None, weight_by_group_size=False):
@@ -134,5 +132,9 @@ def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None
         group_weights = group_weights[indices_of_interest]
     group_weights = group_weights/np.sum(group_weights)
 
+    nap_output_dir = os.path.join(processed_corpus_path, "naps")
+    contrastive_nap_output_dir = os.path.join(processed_corpus_path, "contrastive_naps")
+    makedirs([contrastive_nap_output_dir])
+
     for layer in range(n_layers - 1):
-        compute_and_save_contrastive_layer_nap(processed_corpus_path, layer, indices_of_interest, group_weights)
+        compute_and_save_contrastive_layer_nap(nap_output_dir, contrastive_nap_output_dir, layer, indices_of_interest, group_weights)
