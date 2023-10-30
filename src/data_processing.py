@@ -73,6 +73,14 @@ def process_corpus_file(data_path, model, output_path):
                            'group_to_file.json'), 'w') as f:
         json.dump(group_to_file_dict, f)
 
+    group_ids = np.arange(len(group_names)).astype('str')
+    index_to_group_name = dict(zip(group_ids, group_names))
+    with open(os.path.join(output_path, "index_to_group_name.json"), "w") as f:
+        json.dump(index_to_group_name, f)
+    group_name_to_index = dict(zip(group_names, group_ids))
+    with open(os.path.join(output_path, "group_name_to_index.json"), "w") as f:
+        json.dump(group_name_to_index, f)
+
     for batch_info in corpus:
         batch_file = batch_info[0]
         group_name = batch_info[1]
