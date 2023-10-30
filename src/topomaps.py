@@ -15,7 +15,7 @@ def compute_UMAP(values):
 def compute_TSNE(values):
     return TSNE(init='pca', learning_rate='auto', n_components=2).fit_transform(values)
 
-def distribute_to_circle(pos_init, n_steps=1000):
+def distribute_to_circle(pos_init, n_steps=100):
 
     positions = np.copy(pos_init)
 
@@ -58,6 +58,21 @@ def distribute_to_circle(pos_init, n_steps=1000):
 
     return positions
 
+
+def get_nap_dir(processed_corpus_path, from_contrastive_naps):
+    if from_contrastive_naps is None:
+        if os.path.isdir(os.path.join(processed_corpus_path, "contrastive_naps")):
+            from_contrastive_naps = True
+        else:
+            from_contrastive_naps = False
+
+    if from_contrastive_naps:
+        nap_dir = os.path.join(processed_corpus_path, "contrastive_naps")
+    else:
+        nap_dir = os.path.join(processed_corpus_path, "naps")
+
+    return nap_dir
+
 def compute_and_save_layer_topomap_layouts(values_dir, output_dir, layer, layouting_function, distribute_in_circle):
 
     layer_id = "layer" + str(layer).zfill(3)
@@ -87,24 +102,13 @@ def compute_and_save_layer_topomap_layouts(values_dir, output_dir, layer, layout
         print("skipping", layer_id, "- no channels to compute layout for")
 
 
-
 def compute_topomap_layout(processed_corpus_path,
                            layouting_method="UMAP",
                            distribute_in_circle=True,
                            from_contrastive_naps=None):
 
     n_layers = get_n_layers(processed_corpus_path)
-
-    if from_contrastive_naps is None:
-        if os.path.isdir(os.path.join(processed_corpus_path, "contrastive_naps")):
-            from_contrastive_naps = True
-        else:
-            from_contrastive_naps = False
-
-    if from_contrastive_naps:
-        nap_dir = os.path.join(processed_corpus_path, "contrastive_naps")
-    else:
-        nap_dir = os.path.join(processed_corpus_path, "naps")
+    nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
 
     topomap_output_dir = os.path.join(processed_corpus_path, "topomap_data")
     makedirs([topomap_output_dir])
@@ -116,3 +120,32 @@ def compute_topomap_layout(processed_corpus_path,
 
     for layer in range(n_layers - 1):
         compute_and_save_layer_topomap_layouts(nap_dir, topomap_output_dir, layer, layouting_function, distribute_in_circle)
+
+
+def compute_and_save_layer_topomap_activations(values_dir, output_dir, layer):
+
+    layer_id = "layer" + str(layer).zfill(3)
+
+    nap = np.load(os.path.join(values_dir, layer_id + ".npy"))
+    nap_shape = nap.shape
+
+    if nap_shape[-1] > 1:
+        while len(nap.shape) > 2:
+            nap = np.mean(nap, 1)
+
+        output_path = os.path.join(output_dir, layer_id + "_activations.npy")
+
+        np.save(output_path, nap)
+    else:
+        print("skipping", layer_id, "- no channels to compute representative activation values for")
+
+
+def compute_topomap_activations(processed_corpus_path, from_contrastive_naps=None):
+    n_layers = get_n_layers(processed_corpus_path)
+    nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
+
+    topomap_output_dir = os.path.join(processed_corpus_path, "topomap_data")
+    makedirs([topomap_output_dir])
+
+    for layer in range(n_layers - 1):
+        compute_and_save_layer_topomap_activations(nap_dir, topomap_output_dir, layer)
