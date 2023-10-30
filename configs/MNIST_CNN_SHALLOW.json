@@ -7,5 +7,5 @@
   ],
   "data_path": "/data/project/iNNtrospect/MNIST/",
   "processed_corpus_path": "../output/MNIST_CNN",
-  "use_aligned_naps": true
+  "use_aligned_naps": false
 }

@@ -2,19 +2,19 @@
 # fixed instances of this script go to examples
 import json
 
-from env_setup import ignore_user_installs, set_active_GPU
+from env_setup import local_env_settings
 from src.data_processing import process_corpus_file, align_data
 from src.model import load_model, create_model_with_layer_outputs
 from src.naps import compute_naps
 
-ignore_user_installs('akrug')
-set_active_GPU(0)
+local_env_settings()
+
+# ---
 
 # config_file = "../configs/MNIST_MLP.json"
 config_file = "../configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
-
 
 # load model
 model = load_model(config["model_path"])
