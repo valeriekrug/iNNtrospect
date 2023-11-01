@@ -6,6 +6,7 @@ from env_setup import local_env_settings
 from src.naps import compute_contrastive_naps
 from src.topomaps import compute_topomap_layout, compute_topomap_activations
 from constants.topomap_constants import TOPOMAP_METHODS
+from src.visualization import plot_topomaps
 
 local_env_settings()
 
@@ -29,5 +30,5 @@ compute_topomap_layout(config["processed_corpus_path"],
 compute_topomap_activations(config["processed_corpus_path"],
                             from_contrastive_naps = True)
 
-
-# TODO create visualization
+plot_topomaps(config["processed_corpus_path"], individually=True)
+plot_topomaps(config["processed_corpus_path"], individually=False)

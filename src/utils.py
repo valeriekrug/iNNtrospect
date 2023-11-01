@@ -15,8 +15,8 @@ def tanh(x, inv=False):
         tan = -tan
     return (tan + 1) / 2.
 
-def zero_one_feature_scaling(ndarray):
+def zero_one_feature_scaling(nd_array):
     # scale array to be normalized between 0,1 in every column
-    ndarray = ndarray - np.min(ndarray, 0)
-    ndarray = ndarray / np.max(ndarray, 0)
-    return ndarray
+    nd_array = nd_array - np.min(nd_array, 0)
+    nd_array = nd_array / np.max(nd_array, 0)
+    return nd_array
