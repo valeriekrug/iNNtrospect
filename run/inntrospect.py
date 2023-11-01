@@ -5,17 +5,18 @@ import json
 from env_setup import local_env_settings
 from src.naps import compute_contrastive_naps
 from src.topomaps import compute_topomap_layout, compute_topomap_activations
-from constants.topomap_constants import TOPOMAP_METHODS
+from constants.topomap_constants import TOPOMAP_METHODS, TOPOMAP_PLOTTING_MODES
 from src.visualization import plot_topomaps
 
 local_env_settings()
 
-config_file = "../configs/MNIST_CNN_SHALLOW.json"
+config_file = "../configs/MNIST_MLP.json"
+# config_file = "../configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
 
 
-group_names_of_interest = None#["0","2","4","9"]
+group_names_of_interest = ["0","2","4","9"]
 weight_by_group_size = False
 
 compute_contrastive_naps(config["processed_corpus_path"],
@@ -30,5 +31,7 @@ compute_topomap_layout(config["processed_corpus_path"],
 compute_topomap_activations(config["processed_corpus_path"],
                             from_contrastive_naps = True)
 
-plot_topomaps(config["processed_corpus_path"], individually=True)
-plot_topomaps(config["processed_corpus_path"], individually=False)
+plot_topomaps(config["processed_corpus_path"],
+              mode=TOPOMAP_PLOTTING_MODES.SINGLE)
+plot_topomaps(config["processed_corpus_path"],
+              mode=TOPOMAP_PLOTTING_MODES.ROW)

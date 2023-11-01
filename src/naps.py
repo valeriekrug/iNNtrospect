@@ -118,10 +118,13 @@ def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None
         group_names_of_interest = np.unique(group_names_of_interest)
 
     indices_of_interest = list()
+    contrastive_nap_group_names = list()
 
     for group_name in group_names_of_interest:
         if group_name in group_name_to_index.keys():
             indices_of_interest.append(int(group_name_to_index[group_name]))
+            contrastive_nap_group_names.append(group_name)
+    contrastive_nap_group_names = np.array(contrastive_nap_group_names)
     indices_of_interest = np.array(indices_of_interest)
 
     n_layers = get_n_layers(processed_corpus_path)
@@ -135,6 +138,8 @@ def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None
     nap_output_dir = os.path.join(processed_corpus_path, "naps")
     contrastive_nap_output_dir = os.path.join(processed_corpus_path, "contrastive_naps")
     makedirs([contrastive_nap_output_dir])
+
+    np.save(os.path.join(contrastive_nap_output_dir, "group_names.npy"), contrastive_nap_group_names)
 
     for layer in range(n_layers - 1):
         compute_and_save_contrastive_layer_nap(nap_output_dir, contrastive_nap_output_dir, layer, indices_of_interest, group_weights)

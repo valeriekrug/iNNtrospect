@@ -109,22 +109,22 @@ def plot_layer_topomaps_jointly(topomap_data_dir, plot_output_dir, layer):
         plt.close(fig)
 
 
-def plot_topomaps(processed_corpus_path, individually=True):
+def plot_topomaps(processed_corpus_path, mode="all_in_row"):
     topomap_data_dir = os.path.join(processed_corpus_path, "topomap_data")
 
     n_layers = get_n_layers(processed_corpus_path)
-    with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
-        group_to_index_dict = json.load(f)
-    group_names = [*group_to_index_dict.keys()]
+    group_names = np.load(os.path.join(processed_corpus_path, "contrastive_naps", "group_names.npy"))
 
     plot_output_dir = os.path.join(processed_corpus_path, "topomap_plots")
     makedirs([plot_output_dir])
 
     for layer in range(n_layers - 1):
         compute_interpolated_activation_values(topomap_data_dir, layer)
-        if individually:
+        if mode == "individually":
             plot_layer_topomaps_individually(topomap_data_dir, plot_output_dir, layer, group_names)
-        else:
+        elif mode == "all_in_row":
             plot_layer_topomaps_jointly(topomap_data_dir, plot_output_dir, layer)
+        else:
+            print(mode, ": mode unknown.")
 
     return None

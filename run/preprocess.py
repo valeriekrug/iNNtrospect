@@ -11,8 +11,8 @@ local_env_settings()
 
 # ---
 
-# config_file = "../configs/MNIST_MLP.json"
-config_file = "../configs/MNIST_CNN_SHALLOW.json"
+config_file = "../configs/MNIST_MLP.json"
+# config_file = "../configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
 
