@@ -4,6 +4,9 @@ import shutil
 
 import tensorflow as tf
 import numpy as np
+
+from constants.check_constants import PIPELINE_STEPS
+from src.checks import check_pipeline_dependencies
 from src.utils import makedirs
 
 
@@ -154,6 +157,7 @@ def get_n_batches(processed_corpus_path):
     return n_batches
 
 def align_data(processed_corpus_path):
+    check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.ALIGN)
     n_layers = get_n_layers(processed_corpus_path)
     n_batches = get_n_batches(processed_corpus_path)
 

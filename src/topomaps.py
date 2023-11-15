@@ -5,6 +5,8 @@ import numpy as np
 from umap import UMAP
 from sklearn.manifold import TSNE
 
+from constants.check_constants import PIPELINE_STEPS
+from src.checks import check_pipeline_dependencies
 from src.data_processing import get_n_layers
 from src.utils import makedirs, tanh, zero_one_feature_scaling
 
@@ -107,6 +109,11 @@ def compute_topomap_layout(processed_corpus_path,
                            distribute_in_circle=True,
                            from_contrastive_naps=None):
 
+    if from_contrastive_naps:
+        check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_LAYOUT_CONTRASTIVE)
+    else:
+        check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_LAYOUT)
+
     n_layers = get_n_layers(processed_corpus_path)
     nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
 
@@ -141,6 +148,11 @@ def compute_and_save_layer_topomap_activations(values_dir, output_dir, layer):
 
 
 def compute_topomap_activations(processed_corpus_path, from_contrastive_naps=None):
+    if from_contrastive_naps:
+        check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_ACTIVATIONS_CONTRASTIVE)
+    else:
+        check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_ACTIVATIONS)
+
     n_layers = get_n_layers(processed_corpus_path)
     nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
 

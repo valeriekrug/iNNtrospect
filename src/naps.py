@@ -2,6 +2,8 @@
 import json
 import os
 
+from constants.check_constants import PIPELINE_STEPS
+from src.checks import check_pipeline_dependencies
 from src.data_processing import get_n_layers
 from src.utils import makedirs
 import numpy as np
@@ -79,6 +81,11 @@ def compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir, use
     np.save(nap_file_path, layer_naps)
 
 def compute_naps(processed_corpus_path, use_aligned_acts=True):
+    if use_aligned_acts:
+        check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.NAPS_ALIGNED)
+    else:
+        check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.NAPS)
+
     n_layers = get_n_layers(processed_corpus_path)
 
     nap_output_dir = os.path.join(processed_corpus_path, "naps")
@@ -109,6 +116,8 @@ def compute_and_save_contrastive_layer_nap(nap_dir, output_dir, layer, indices_o
     np.save(nap_file_path, nap)
 
 def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None, weight_by_group_size=False):
+    check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.CONTRASTIVE_NAPS)
+
     with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
         group_name_to_index = json.load(f)
 

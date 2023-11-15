@@ -6,6 +6,8 @@ import numpy as np
 from scipy import interpolate
 import matplotlib.pyplot as plt
 
+from constants.check_constants import PIPELINE_STEPS
+from src.checks import check_pipeline_dependencies
 from src.data_processing import get_n_layers
 from src.utils import makedirs
 
@@ -110,9 +112,11 @@ def plot_layer_topomaps_jointly(topomap_data_dir, plot_output_dir, layer):
 
 
 def plot_topomaps(processed_corpus_path, mode="all_in_row"):
+    check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_PLOTS)
     topomap_data_dir = os.path.join(processed_corpus_path, "topomap_data")
 
     n_layers = get_n_layers(processed_corpus_path)
+    #TODO get group_names from somewhere else, contrastive naps does not always exist
     group_names = np.load(os.path.join(processed_corpus_path, "contrastive_naps", "group_names.npy"))
 
     plot_output_dir = os.path.join(processed_corpus_path, "topomap_plots")

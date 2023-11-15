@@ -16,7 +16,7 @@ with open(config_file, "r") as f:
     config = json.load(f)
 
 
-group_names_of_interest = ["0","2","4","9"]
+group_names_of_interest = None#["0","2","4","9"]
 weight_by_group_size = False
 
 compute_contrastive_naps(config["processed_corpus_path"],

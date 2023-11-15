@@ -1,0 +1,48 @@
+import os.path
+import shutil
+import warnings
+
+pipeline_dir_input_dependencies = {
+    "align": ["acts","grads"],
+    "naps": ["acts"],
+    "naps_aligned": ["aligned"],
+    "contrastive_naps": ["naps"],
+    "topomap_layout": ["naps"],
+    "topomap_layout_contrastive": ["contrastive_naps"],
+    "topomap_activations": ["naps"],
+    "topomap_activations_contrastive": ["contrastive_naps"],
+    "topomap_plots": ["topomap_data"]
+}
+
+
+assure_sync = True
+
+pipeline_dir_async_effects = {
+    "align": ["naps", "contrastive_naps", "topomap_data", "topomap_plots"],
+    "naps": ["contrastive_naps", "topomap_data", "topomap_plots"],
+    "naps_aligned": ["contrastive_naps", "topomap_data", "topomap_plots"],
+    "contrastive_naps": ["topomap_data", "topomap_plots"],
+    "topomap_layout": ["topomap_plots"],
+    "topomap_layout_contrastive": ["topomap_plots"],
+    "topomap_activations": ["topomap_plots"],
+    "topomap_activations_contrastive": ["topomap_plots"],
+    "topomap_plots": []
+}
+
+def check_pipeline_dependencies(processed_corpus_path, step):
+
+    for dir_name in pipeline_dir_input_dependencies[step]:
+        check_path = os.path.join(processed_corpus_path, dir_name)
+        if not os.path.isdir(check_path):
+            err_msg = "step '" + step + "' depends on '" + dir_name + "' which does not exist. "
+            raise ValueError(err_msg)
+
+    if assure_sync:
+        for dir_name in pipeline_dir_async_effects[step]:
+            check_path = os.path.join(processed_corpus_path, dir_name)
+            if os.path.isdir(check_path):
+                #TODO change to a user yes/no input
+                warn_msg = ("running step '" + step + "' overwrites data used for creating '" + dir_name + "'.\n" +
+                            "Deleting it according to 'assure_sync=True' flag in src/checks.py .")
+                warnings.warn(warn_msg)
+                shutil.rmtree(check_path)
