@@ -1,6 +1,5 @@
 import os.path
 import shutil
-import warnings
 
 pipeline_dir_input_dependencies = {
     "align": ["acts","grads"],
@@ -51,9 +50,9 @@ def check_pipeline_dependencies(processed_corpus_path, step):
         for dir_name in pipeline_dir_async_effects[step]:
             check_path = os.path.join(processed_corpus_path, dir_name)
             if os.path.isdir(check_path):
-                warn_msg = ("running step '" + step + "' overwrites data used for creating '" + dir_name + "'.\n" +
+                info_msg = ("running step '" + step + "' overwrites data used for creating '" + dir_name + "'.\n" +
                             "Needs to be deleted according to 'assure_sync=True' flag in src/checks.py .")
-                warnings.warn(warn_msg)
+                print(info_msg)
                 if not agreed_deleting:
                     agreed_deleting = get_user_delete_agreement()
                 shutil.rmtree(check_path)

@@ -18,7 +18,6 @@ with open(config_file, "r") as f:
 
 group_names_of_interest = None#["0","2","4","9"]
 weight_by_group_size = False
-
 compute_contrastive_naps(config["processed_corpus_path"],
                          group_names_of_interest = group_names_of_interest,
                          weight_by_group_size = weight_by_group_size)
