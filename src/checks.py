@@ -29,6 +29,15 @@ pipeline_dir_async_effects = {
     "topomap_plots": []
 }
 
+def get_user_delete_agreement():
+    print('Do you agree with deleting potentially dependent directories? (yes/no):')
+    x = input()
+    if x != "yes":
+        stop_msg = "Stopping: either agree to deleting or set 'assure_sync=False' in src/checks.py ."
+        raise ValueError(stop_msg)
+    else:
+        return True
+
 def check_pipeline_dependencies(processed_corpus_path, step):
 
     for dir_name in pipeline_dir_input_dependencies[step]:
@@ -38,11 +47,13 @@ def check_pipeline_dependencies(processed_corpus_path, step):
             raise ValueError(err_msg)
 
     if assure_sync:
+        agreed_deleting = False
         for dir_name in pipeline_dir_async_effects[step]:
             check_path = os.path.join(processed_corpus_path, dir_name)
             if os.path.isdir(check_path):
-                #TODO change to a user yes/no input
                 warn_msg = ("running step '" + step + "' overwrites data used for creating '" + dir_name + "'.\n" +
-                            "Deleting it according to 'assure_sync=True' flag in src/checks.py .")
+                            "Needs to be deleted according to 'assure_sync=True' flag in src/checks.py .")
                 warnings.warn(warn_msg)
+                if not agreed_deleting:
+                    agreed_deleting = get_user_delete_agreement()
                 shutil.rmtree(check_path)

@@ -116,8 +116,7 @@ def plot_topomaps(processed_corpus_path, mode="all_in_row"):
     topomap_data_dir = os.path.join(processed_corpus_path, "topomap_data")
 
     n_layers = get_n_layers(processed_corpus_path)
-    #TODO get group_names from somewhere else, contrastive naps does not always exist
-    group_names = np.load(os.path.join(processed_corpus_path, "contrastive_naps", "group_names.npy"))
+    group_names = np.load(os.path.join(topomap_data_dir, "group_names.npy"))
 
     plot_output_dir = os.path.join(processed_corpus_path, "topomap_plots")
     makedirs([plot_output_dir])

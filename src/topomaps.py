@@ -1,5 +1,7 @@
 # functions to compute topographic layouts of values
+import json
 import os.path
+import shutil
 
 import numpy as np
 from umap import UMAP
@@ -148,16 +150,23 @@ def compute_and_save_layer_topomap_activations(values_dir, output_dir, layer):
 
 
 def compute_topomap_activations(processed_corpus_path, from_contrastive_naps=None):
+    topomap_output_dir = os.path.join(processed_corpus_path, "topomap_data")
+    makedirs([topomap_output_dir])
+
     if from_contrastive_naps:
         check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_ACTIVATIONS_CONTRASTIVE)
+        shutil.copyfile(os.path.join(processed_corpus_path, "contrastive_naps", "group_names.npy"),
+                        os.path.join(topomap_output_dir, "group_names.npy"))
     else:
         check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_ACTIVATIONS)
+        with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
+            group_name_to_index = json.load(f)
+        group_names = [*group_name_to_index.keys()]
+        np.save(os.path.join(topomap_output_dir, "group_names.npy"),
+                group_names)
 
     n_layers = get_n_layers(processed_corpus_path)
     nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
-
-    topomap_output_dir = os.path.join(processed_corpus_path, "topomap_data")
-    makedirs([topomap_output_dir])
 
     for layer in range(n_layers - 1):
         compute_and_save_layer_topomap_activations(nap_dir, topomap_output_dir, layer)
