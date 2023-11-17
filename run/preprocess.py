@@ -1,16 +1,16 @@
 # script for running a preprocessing pipeline to generate data for iNNtrospection
 # fixed instances of this script go to examples
-import json
 
-from env_setup import local_env_settings
+# from env_setup import local_env_settings
+# local_env_settings()
+
+import json
 from src.data_processing import process_corpus_file, align_data
 from src.model import load_model, create_model_with_layer_outputs
 from src.naps import compute_naps
 
-local_env_settings()
-
-config_file = "../configs/MNIST_MLP.json"
-# config_file = "../configs/MNIST_CNN_SHALLOW.json"
+config_file = "examples/configs/MNIST_MLP.json"
+# config_file = "examples/configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
 

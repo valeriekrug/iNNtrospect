@@ -50,7 +50,7 @@ def check_pipeline_dependencies(processed_corpus_path, step):
         for dir_name in pipeline_dir_async_effects[step]:
             check_path = os.path.join(processed_corpus_path, dir_name)
             if os.path.isdir(check_path):
-                info_msg = ("running step '" + step + "' overwrites data used for creating '" + dir_name + "'.\n" +
+                info_msg = ("running step '" + step + "' overwrites data that was used for creating '" + dir_name + "'.\n" +
                             "Needs to be deleted according to 'assure_sync=True' flag in src/checks.py .")
                 print(info_msg)
                 if not agreed_deleting:

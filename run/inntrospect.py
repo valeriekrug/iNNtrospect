@@ -1,17 +1,18 @@
 # script for performing iNNtrospection
 # fixed instances of this script go to examples
-import json
 
-from env_setup import local_env_settings
+# from env_setup import local_env_settings
+# local_env_settings()
+
+import json
 from src.naps import compute_contrastive_naps
 from src.topomaps import compute_topomap_layout, compute_topomap_activations
 from constants.topomap_constants import TOPOMAP_METHODS, TOPOMAP_PLOTTING_MODES
 from src.visualization import plot_topomaps
 
-local_env_settings()
 
-config_file = "../configs/MNIST_MLP.json"
-# config_file = "../configs/MNIST_CNN_SHALLOW.json"
+config_file = "examples/configs/MNIST_MLP.json"
+# config_file = "examples/configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
 
