@@ -5,7 +5,7 @@ With iNNtrospect, you can better understand learned representations of Deep Neur
 
 ## Approach
 
-![NAP and Topomap Method Overview](assets/images/method_overview.pdf)
+![NAP and Topomap Method Overview](assets/images/method_overview.png)
 
 ## Supported Frameworks
 
