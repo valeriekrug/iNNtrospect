@@ -34,24 +34,25 @@ batch0003.npy,1,1
 ```
 
 Steps of the Pipeline:
+`<output>` directory is defined in the configuration file
 
-1. `process_corpus_file()` performs model inference for each batch  
-   and stores activations (and gradients) for every batch in the directories `<output>/acts/` and `<output>/grads/`
-2. `align_data()` (optional) aligns activations in `<output>/acts/` according to gradients in `<output>/grads/`  
-	and stores them in `<output>/aligned/`
-3. `compute_naps()` computes average activations of (aligned activations)  
-   and stores them in `<output>/naps/`
-4. `compute_contrastive_naps()` (optional) contrasts NAPs between a given set of groups of interest  
-   and stores the results in `<output>/contrastive_naps/`
-5. `compute_topomap_layout()` and `compute_topomap_activations()` compute a topographic layout and representative activations per layer  
-   and store the results in `<output>/topomap_data/`
-6. `plot_topomaps()` creates visualizations of the topographic maps according to `<output>/topomap_data/`  
-	and stores them in `<output>/topomap_plots/`
+1. `process_corpus_file()` performs model inference for each batch and stores activations (and gradients) for every batch.   
+   -> `<output>/acts/` and `<output>/grads/`
+2. `align_data()` (optional) aligns activations in `<output>/acts/` according to gradients in `<output>/grads/`.  
+	-> `<output>/aligned/`
+3. `compute_naps()` computes average activations of (aligned activations).  
+   -> `<output>/naps/`
+4. `compute_contrastive_naps()` (optional) contrasts NAPs between a given set of groups of interest.  
+   -> `<output>/contrastive_naps/`
+5. `compute_topomap_layout()` and `compute_topomap_activations()` compute a topographic layout and representative activations per layer.  
+   -> `<output>/topomap_data/`
+6. `plot_topomaps()` creates visualizations of the topographic maps according to `<output>/topomap_data/`.  
+   -> `<output>/topomap_plots/`
 
 ## Usage (other frameworks)
 
 You need to provide activations and gradients in the same structure as `process_corpus_file()` in Pipeline step 1.  
-Also, several auxillary dictionaries need to be created, in the `<output>/` directory: `group_name_to_files.json`, `group_name_to_index.json`, `index_to_group_name.json`.
+Also, several auxillary dictionaries need to be created, in the `<output>/` directory: `group_name_to_files.json`, `group_name_to_index.json`, `index_to_group_name.json`.  
 All following steps are independent of the Deep Learning Framework.
 
 ## References
