@@ -19,8 +19,7 @@ Examples of running the entire pipeline usages are provided in `examples/`.
 Preparation:
 
 - Provide a model (Tensorflow)
-- prepare a configuration dictionary or file  
-  (see `examples/configs/MNIST_MLP.json`)
+- prepare a configuration dictionary or file (see `examples/configs/MNIST_MLP.json`)
 - Prepare the data
 
 Data needs to be stored in batches as numpy files, including a `corpus.csv` file of format:
