@@ -131,3 +131,28 @@ def plot_topomaps(processed_corpus_path, mode="all_in_row"):
             print(mode, ": mode unknown.")
 
     return None
+
+def plot_instance_projections(processed_corpus_path):
+    check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.INSTANCE_PROJECTION_PLOTS)
+
+    projection_output_dir = os.path.join(processed_corpus_path, "instance_projection_data")
+    projection_plot_output_dir = os.path.join(processed_corpus_path, "instance_projection_plots")
+    makedirs([projection_plot_output_dir])
+
+    n_layers = get_n_layers(processed_corpus_path)
+    for layer in range(n_layers - 1):
+        projection = np.load(os.path.join(projection_output_dir, "layer" + str(layer).zfill(3) + "_projection.npy"))
+        group_names = np.load(os.path.join(projection_output_dir, "layer" + str(layer).zfill(3) + "_inst_group_names.npy"))
+        unique_names = np.unique(group_names)
+        name_to_index = dict(zip(unique_names, np.arange(len(unique_names))))
+        group_names_as_int = [name_to_index[x] for x in group_names]
+
+        projection_plot_file = os.path.join(projection_plot_output_dir, "layer" + str(layer).zfill(3) + "_projection_plot.pdf")
+        fig = plt.figure(figsize=(10,10))
+        scatter = plt.scatter(projection[:,0], projection[:,1], c=group_names_as_int, cmap="nipy_spectral",alpha=0.7)
+        plt.legend(handles=scatter.legend_elements()[0],
+                   labels=list(unique_names))
+        plt.yticks([])
+        plt.xticks([])
+        plt.savefig(projection_plot_file, bbox_inches='tight')
+        plt.close(fig)

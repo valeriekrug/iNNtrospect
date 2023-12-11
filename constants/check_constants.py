@@ -2,6 +2,8 @@ class PIPELINE_STEPS:
     ALIGN = "align"
     NAPS_ALIGNED = "naps_aligned"
     NAPS = "naps"
+    INSTANCE_PROJECTION = "instance_projection"
+    INSTANCE_PROJECTION_PLOTS = "instance_projection_plots"
     CONTRASTIVE_NAPS = "contrastive_naps"
     TOPOMAP_LAYOUT = "topomap_layout"
     TOPOMAP_LAYOUT_CONTRASTIVE = "topomap_layout_contrastive"

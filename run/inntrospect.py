@@ -6,21 +6,28 @@
 
 import json
 from src.naps import compute_contrastive_naps
+from src.representation_analysis import compute_instance_projections
 from src.topomaps import compute_topomap_layout, compute_topomap_activations
 from constants.topomap_constants import TOPOMAP_METHODS, TOPOMAP_PLOTTING_MODES
-from src.visualization import plot_topomaps
-
+from src.visualization import plot_topomaps, plot_instance_projections
 
 config_file = "examples/configs/MNIST_MLP.json"
 # config_file = "examples/configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
 
+group_names_of_interest_projection = None #["0","2","4","9"]
 
-group_names_of_interest = None#["0","2","4","9"]
+compute_instance_projections(config["processed_corpus_path"],
+                             group_names_of_interest = group_names_of_interest_projection,
+                             n_batches_per_group = 1)
+
+plot_instance_projections(config["processed_corpus_path"])
+
+group_names_of_interest_naps = None#["0","2","4","9"]
 weight_by_group_size = False
 compute_contrastive_naps(config["processed_corpus_path"],
-                         group_names_of_interest = group_names_of_interest,
+                         group_names_of_interest = group_names_of_interest_naps,
                          weight_by_group_size = weight_by_group_size)
 
 compute_topomap_layout(config["processed_corpus_path"],
