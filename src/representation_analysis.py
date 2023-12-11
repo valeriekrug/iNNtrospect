@@ -24,12 +24,12 @@ def stack_and_flat_batch_activations(processed_corpus_path, output_dir, group_na
             for batch_name in batch_names:
                 batch = np.load(os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ACTS, "layer" + str(layer).zfill(3), batch_name))
                 activations.append(batch)
-                instance_group_names.append(len(batch) * [key])
+                instance_group_names.append(np.array(len(batch) * [key]))
 
     activations = np.concatenate(activations, 0)
     flat_activations = np.reshape(activations, [activations.shape[0],
                                                 np.prod(activations.shape[1:])])
-    instance_group_names = np.concatenate(np.array(instance_group_names))
+    instance_group_names = np.concatenate(instance_group_names,0)
 
     np.save(os.path.join(output_dir, "layer" + str(layer).zfill(3) + "_flat_acts.npy"), flat_activations)
     np.save(os.path.join(output_dir, "layer" + str(layer).zfill(3) + "_inst_group_names.npy"),
