@@ -1,34 +1,46 @@
+import json
+import numpy as np
 import os.path
 import shutil
 
-pipeline_dir_input_dependencies = {
-    "align": ["acts","grads"],
-    "naps": ["acts"],
-    "naps_aligned": ["aligned"],
-    "instance_projection": ["acts"],
-    "instance_projection_plots": ["instance_projection_data"],
-    "contrastive_naps": ["naps"],
-    "topomap_layout": ["naps"],
-    "topomap_layout_contrastive": ["contrastive_naps"],
-    "topomap_activations": ["naps"],
-    "topomap_activations_contrastive": ["contrastive_naps"],
-    "topomap_plots": ["topomap_data"]
-}
+from constants.directory_constants import OUTPUT_DIRECTORY_NAMES
 
+pipeline_dir_input_dependencies = {
+    "align": [OUTPUT_DIRECTORY_NAMES.ACTS,
+              OUTPUT_DIRECTORY_NAMES.GRADS],
+    "naps": [OUTPUT_DIRECTORY_NAMES.ACTS],
+    "naps_aligned": [OUTPUT_DIRECTORY_NAMES.ALIGNED],
+    "instance_projection": [OUTPUT_DIRECTORY_NAMES.ACTS],
+    "instance_projection_plots": [OUTPUT_DIRECTORY_NAMES.INSTANCE_PROJECTION_DATA],
+    "contrastive_naps": [OUTPUT_DIRECTORY_NAMES.NAPS],
+    "topomap_layout": [OUTPUT_DIRECTORY_NAMES.NAPS],
+    "topomap_layout_contrastive": [OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS],
+    "topomap_activations": [OUTPUT_DIRECTORY_NAMES.NAPS],
+    "topomap_activations_contrastive": [OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS],
+    "topomap_plots": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA]
+}
 
 assure_sync = True
 
 pipeline_dir_async_effects = {
-    "align": ["naps", "contrastive_naps", "topomap_data", "topomap_plots"],
-    "naps": ["contrastive_naps", "topomap_data", "topomap_plots"],
-    "naps_aligned": ["contrastive_naps", "topomap_data", "topomap_plots"],
-    "instance_projection": ["instance_projection_plots"],
+    "align": [OUTPUT_DIRECTORY_NAMES.NAPS,
+              OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS,
+              OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA,
+              OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "naps": [OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS,
+             OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA,
+             OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "naps_aligned": [OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS,
+                     OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA,
+                     OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "instance_projection": [OUTPUT_DIRECTORY_NAMES.INSTANCE_PROJECTION_DATA],
     "instance_projection_plots": [],
-    "contrastive_naps": ["topomap_data", "topomap_plots"],
-    "topomap_layout": ["topomap_plots"],
-    "topomap_layout_contrastive": ["topomap_plots"],
-    "topomap_activations": ["topomap_plots"],
-    "topomap_activations_contrastive": ["topomap_plots"],
+    "contrastive_naps": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA,
+                         OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "topomap_layout": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "topomap_layout_contrastive": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "topomap_activations": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+    "topomap_activations_contrastive": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
     "topomap_plots": []
 }
 
@@ -60,3 +72,14 @@ def check_pipeline_dependencies(processed_corpus_path, step):
                 if not agreed_deleting:
                     agreed_deleting = get_user_delete_agreement()
                 shutil.rmtree(check_path)
+
+def check_group_names_of_interest(processed_corpus_path, group_names_of_interest):
+    with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
+        group_name_to_index = json.load(f)
+
+    if group_names_of_interest is None:
+        group_names_of_interest = [*group_name_to_index.keys()]
+    else:
+        group_names_of_interest = np.unique(group_names_of_interest)
+
+    return group_names_of_interest

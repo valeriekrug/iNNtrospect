@@ -6,16 +6,17 @@ import tensorflow as tf
 import numpy as np
 
 from constants.check_constants import PIPELINE_STEPS
+from constants.directory_constants import OUTPUT_DIRECTORY_NAMES
 from src.checks import check_pipeline_dependencies
 from src.utils import makedirs
 
 
 def create_acts_grads_output_dirs(output_path, n_layers, with_aligned=False):
-    output_acts_path = os.path.join(output_path, "acts")
-    output_grads_path = os.path.join(output_path, "grads")
+    output_acts_path = os.path.join(output_path, OUTPUT_DIRECTORY_NAMES.ACTS)
+    output_grads_path = os.path.join(output_path, OUTPUT_DIRECTORY_NAMES.GRADS)
     output_aln_path = None
     if with_aligned:
-        output_aln_path = os.path.join(output_path, "aligned")
+        output_aln_path = os.path.join(output_path, OUTPUT_DIRECTORY_NAMES.ALIGNED)
     for i in range(n_layers):
         layer_running_id = 'layer' + str(i).zfill(3)
         layer_output_acts_path = os.path.join(output_acts_path, layer_running_id)
@@ -46,8 +47,8 @@ def get_acts_and_grads_of_batch(model, batch):
     return batch_activations, batch_grads
 
 def save_batch_acts_and_grads_per_layer(acts, grads, batch_file, output_path):
-    output_acts_path = os.path.join(output_path, "acts")
-    output_grads_path = os.path.join(output_path, "grads")
+    output_acts_path = os.path.join(output_path, OUTPUT_DIRECTORY_NAMES.ACTS)
+    output_grads_path = os.path.join(output_path, OUTPUT_DIRECTORY_NAMES.GRADS)
     layer_of_interest_id = 0
     for layer_acts, layer_grads in zip(acts, grads):
         np.save(os.path.join(output_acts_path, 'layer' + str(layer_of_interest_id).zfill(3), batch_file),
@@ -97,11 +98,11 @@ def process_corpus_file(data_path, model, output_path):
 
 def load_batch_acts_and_grads(processed_corpus_path, layer_id, batch_id):
     layer_batch_acts = np.load(os.path.join(processed_corpus_path,
-                                            'acts',
+                                            OUTPUT_DIRECTORY_NAMES.ACTS,
                                             'layer' + str(layer_id).zfill(3),
                                             'batch' + str(batch_id).zfill(4) + '.npy'))
     layer_batch_grads = np.load(os.path.join(processed_corpus_path,
-                                             'grads',
+                                             OUTPUT_DIRECTORY_NAMES.GRADS,
                                              'layer' + str(layer_id).zfill(3),
                                              'batch' + str(batch_id).zfill(4) + '.npy'))
     return layer_batch_acts, layer_batch_grads
@@ -142,7 +143,7 @@ def align_by_pad_and_crop(activations, index_per_dim):
     return aligned_example_acts
 
 def get_n_layers(processed_corpus_path):
-    output_acts_path = os.path.join(processed_corpus_path, "acts")
+    output_acts_path = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ACTS)
     layer_dirs = os.listdir(output_acts_path)
     layer_dirs = [l for l in layer_dirs if "layer" in l]
     n_layers = len(layer_dirs)
@@ -150,7 +151,7 @@ def get_n_layers(processed_corpus_path):
     return n_layers
 
 def get_n_batches(processed_corpus_path):
-    batch_filenames = os.listdir(os.path.join(processed_corpus_path, "acts", "layer000"))
+    batch_filenames = os.listdir(os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ACTS, "layer000"))
     batch_filenames = [bfn for bfn in batch_filenames if ".npy" in bfn]
     n_batches = len(batch_filenames)
 
@@ -164,7 +165,7 @@ def align_data(processed_corpus_path):
     create_acts_grads_output_dirs(processed_corpus_path, n_layers, with_aligned=True)
 
     for layer_id in range(n_layers-1):
-        output_aligned_layer_path = os.path.join(processed_corpus_path, 'aligned', 'layer' + str(layer_id).zfill(3))
+        output_aligned_layer_path = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ALIGNED, 'layer' + str(layer_id).zfill(3))
         for batch_id in range(n_batches):
             layer_batch_acts, layer_batch_grads = load_batch_acts_and_grads(processed_corpus_path, layer_id, batch_id)
 

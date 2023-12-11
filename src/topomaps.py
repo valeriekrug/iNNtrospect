@@ -8,6 +8,7 @@ from umap import UMAP
 from sklearn.manifold import TSNE
 
 from constants.check_constants import PIPELINE_STEPS
+from constants.directory_constants import OUTPUT_DIRECTORY_NAMES
 from src.checks import check_pipeline_dependencies
 from src.data_processing import get_n_layers
 from src.utils import makedirs, tanh, zero_one_feature_scaling
@@ -65,15 +66,15 @@ def distribute_to_circle(pos_init, n_steps=100):
 
 def get_nap_dir(processed_corpus_path, from_contrastive_naps):
     if from_contrastive_naps is None:
-        if os.path.isdir(os.path.join(processed_corpus_path, "contrastive_naps")):
+        if os.path.isdir(os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS)):
             from_contrastive_naps = True
         else:
             from_contrastive_naps = False
 
     if from_contrastive_naps:
-        nap_dir = os.path.join(processed_corpus_path, "contrastive_naps")
+        nap_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS)
     else:
-        nap_dir = os.path.join(processed_corpus_path, "naps")
+        nap_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.NAPS)
 
     return nap_dir
 
@@ -119,7 +120,7 @@ def compute_topomap_layout(processed_corpus_path,
     n_layers = get_n_layers(processed_corpus_path)
     nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
 
-    topomap_output_dir = os.path.join(processed_corpus_path, "topomap_data")
+    topomap_output_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA)
     makedirs([topomap_output_dir])
 
     layouting_method_to_function = {"UMAP": compute_UMAP,
@@ -150,12 +151,12 @@ def compute_and_save_layer_topomap_activations(values_dir, output_dir, layer):
 
 
 def compute_topomap_activations(processed_corpus_path, from_contrastive_naps=None):
-    topomap_output_dir = os.path.join(processed_corpus_path, "topomap_data")
+    topomap_output_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA)
     makedirs([topomap_output_dir])
 
     if from_contrastive_naps:
         check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_ACTIVATIONS_CONTRASTIVE)
-        shutil.copyfile(os.path.join(processed_corpus_path, "contrastive_naps", "group_names.npy"),
+        shutil.copyfile(os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS, "group_names.npy"),
                         os.path.join(topomap_output_dir, "group_names.npy"))
     else:
         check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_ACTIVATIONS)

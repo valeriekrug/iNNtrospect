@@ -5,7 +5,8 @@ import numpy as np
 from umap import UMAP
 
 from constants.check_constants import PIPELINE_STEPS
-from src.checks import check_pipeline_dependencies
+from constants.directory_constants import OUTPUT_DIRECTORY_NAMES
+from src.checks import check_pipeline_dependencies, check_group_names_of_interest
 from src.data_processing import get_n_layers
 from src.utils import makedirs
 
@@ -21,7 +22,7 @@ def stack_and_flat_batch_activations(processed_corpus_path, output_dir, group_na
         if key in group_name_to_files.keys():
             batch_names = group_name_to_files[key][:n_batches_per_group]
             for batch_name in batch_names:
-                batch = np.load(os.path.join(processed_corpus_path, "acts", "layer" + str(layer).zfill(3), batch_name))
+                batch = np.load(os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ACTS, "layer" + str(layer).zfill(3), batch_name))
                 activations.append(batch)
                 instance_group_names.append(len(batch) * [key])
 
@@ -44,14 +45,9 @@ def compute_projection_from_flat_activations(output_dir, layer):
 def compute_instance_projections(processed_corpus_path, group_names_of_interest, n_batches_per_group):
     check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.INSTANCE_PROJECTION)
 
-    with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
-        group_name_to_index = json.load(f)
-    if group_names_of_interest is None:
-        group_names_of_interest = [*group_name_to_index.keys()]
-    else:
-        group_names_of_interest = np.unique(group_names_of_interest)
+    group_names_of_interest = check_group_names_of_interest(processed_corpus_path, group_names_of_interest)
 
-    projection_output_dir = os.path.join(processed_corpus_path, "instance_projection_data")
+    projection_output_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.INSTANCE_PROJECTION_DATA)
     makedirs([projection_output_dir])
 
     n_layers = get_n_layers(processed_corpus_path)

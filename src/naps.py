@@ -3,14 +3,15 @@ import json
 import os
 
 from constants.check_constants import PIPELINE_STEPS
-from src.checks import check_pipeline_dependencies
+from constants.directory_constants import OUTPUT_DIRECTORY_NAMES
+from src.checks import check_pipeline_dependencies, check_group_names_of_interest
 from src.data_processing import get_n_layers
 from src.utils import makedirs
 import numpy as np
 
 def compute_group_sizes(processed_corpus_path):
     layer_id = "layer000"
-    activations_dir = os.path.join(processed_corpus_path, "acts", layer_id)
+    activations_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ACTS, layer_id)
 
     with open(os.path.join(processed_corpus_path, "group_name_to_files.json"), "r") as f:
         group_to_file_dict = json.load(f)
@@ -38,9 +39,9 @@ def compute_group_sizes(processed_corpus_path):
 def compute_group_average(processed_corpus_path, layer_id, acts_from_aligned, group_files):
 
     if acts_from_aligned:
-        activations_dir = os.path.join(processed_corpus_path, "aligned", layer_id)
+        activations_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ALIGNED, layer_id)
     else:
-        activations_dir = os.path.join(processed_corpus_path, "acts", layer_id)
+        activations_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ACTS, layer_id)
 
     n_examples_per_batch = list()
     batch_averages = list()
@@ -62,7 +63,7 @@ def compute_group_average(processed_corpus_path, layer_id, acts_from_aligned, gr
 def compute_and_save_layer_nap(processed_corpus_path, layer, nap_output_dir, use_aligned_acts):
     acts_from_aligned = False
     layer_id = "layer" + str(layer).zfill(3)
-    test_activation_dir = os.path.join(processed_corpus_path, "aligned", layer_id)
+    test_activation_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.ALIGNED, layer_id)
     if use_aligned_acts and os.path.isdir(test_activation_dir):
         acts_from_aligned = True
 
@@ -88,7 +89,7 @@ def compute_naps(processed_corpus_path, use_aligned_acts=True):
 
     n_layers = get_n_layers(processed_corpus_path)
 
-    nap_output_dir = os.path.join(processed_corpus_path, "naps")
+    nap_output_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.NAPS)
     makedirs([nap_output_dir])
 
     compute_group_sizes(processed_corpus_path)
@@ -121,10 +122,7 @@ def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None
     with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
         group_name_to_index = json.load(f)
 
-    if group_names_of_interest is None:
-        group_names_of_interest = [*group_name_to_index.keys()]
-    else:
-        group_names_of_interest = np.unique(group_names_of_interest)
+    group_names_of_interest = check_group_names_of_interest(processed_corpus_path, group_names_of_interest)
 
     indices_of_interest = list()
     contrastive_nap_group_names = list()
@@ -144,8 +142,8 @@ def compute_contrastive_naps(processed_corpus_path, group_names_of_interest=None
         group_weights = group_weights[indices_of_interest]
     group_weights = group_weights/np.sum(group_weights)
 
-    nap_output_dir = os.path.join(processed_corpus_path, "naps")
-    contrastive_nap_output_dir = os.path.join(processed_corpus_path, "contrastive_naps")
+    nap_output_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.NAPS)
+    contrastive_nap_output_dir = os.path.join(processed_corpus_path, OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS)
     makedirs([contrastive_nap_output_dir])
 
     np.save(os.path.join(contrastive_nap_output_dir, "group_names.npy"), contrastive_nap_group_names)
