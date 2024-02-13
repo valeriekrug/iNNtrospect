@@ -1,5 +1,5 @@
 {
-  "model_path": "examples/models/MNIST_MLP",
+  "model_path": "examples/MNIST/models/MNIST_MLP",
   "layer_names_of_interest": [
     "layer_2"
   ],

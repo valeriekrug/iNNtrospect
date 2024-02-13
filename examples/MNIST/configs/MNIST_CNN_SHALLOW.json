@@ -1,5 +1,5 @@
 {
-  "model_path": "examples/models/MNIST_CNN_SHALLOW",
+  "model_path": "examples/MNIST/models/MNIST_CNN_SHALLOW",
   "layer_names_of_interest": [
     "conv2d_24",
     "conv2d_25",

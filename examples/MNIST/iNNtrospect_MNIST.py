@@ -14,8 +14,8 @@ import json
 import numpy as np
 import tensorflow as tf
 
-config_file = "examples/configs/MNIST_MLP.json"
-# config_file = "examples/configs/MNIST_CNN_SHALLOW.json"
+config_file = "examples/MNIST/configs/MNIST_MLP.json"
+# config_file = "examples/MNIST/configs/MNIST_CNN_SHALLOW.json"
 with open(config_file, "r") as f:
     config = json.load(f)
 
@@ -46,7 +46,8 @@ batch_id = 0
 for cid in range(10):
     class_example_ids = np.argwhere(test_labels==cid)[:,0]
 
-    random_class_ids = class_example_ids[np.random.choice(len(class_example_ids),n_random_per_class)]
+    random_class_ids = class_example_ids[np.random.choice(len(class_example_ids),
+                                                          n_random_per_class)]
 
     batch_start_idx = 0
 

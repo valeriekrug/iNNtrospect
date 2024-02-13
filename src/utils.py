@@ -4,9 +4,12 @@ import os
 import numpy as np
 
 def makedirs(path_list):
-    for path in path_list:
-        if not os.path.isdir(path):
-            os.makedirs(path)
+    if type(path_list) == list:
+        for path in path_list:
+            if not os.path.isdir(path):
+                os.makedirs(path)
+    else:
+        raise ValueError("This makedirs() function expects a list!")
 
 
 def tanh(x, inv=False):
