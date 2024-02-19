@@ -60,6 +60,7 @@ def save_batch_acts_and_grads_per_layer(acts, grads, batch_file, output_path):
             acts[-1])
 
 def process_corpus_file(data_path, model, output_path):
+    check_pipeline_dependencies(output_path, PIPELINE_STEPS.ACTS_GRADS)
 
     create_acts_grads_output_dirs(output_path, len(model.outputs))
 

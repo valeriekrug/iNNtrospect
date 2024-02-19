@@ -1,4 +1,5 @@
 class PIPELINE_STEPS:
+    ACTS_GRADS = "acts_grads"
     ALIGN = "align"
     NAPS_ALIGNED = "naps_aligned"
     NAPS = "naps"

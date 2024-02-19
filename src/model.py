@@ -10,6 +10,12 @@ def load_model(path):
     model = keras.models.load_model(path)
     return model
 
+name_to_model = {"VGG16":  keras.applications.vgg16.VGG16}
+
+def load_imagenet_pretrained_model(model_name):
+    model = name_to_model[model_name]()
+    return model
+
 def get_layer_outputs_of_interest(model_layers, layer_names_of_interest):
     model_layer_outputs_of_interest = []
     model_layer_names = [l.name for l in model_layers]

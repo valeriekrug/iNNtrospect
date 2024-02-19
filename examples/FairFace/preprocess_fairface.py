@@ -12,7 +12,7 @@ import json
 def image_path_to_numpy(file_name):
     img = Image.open(file_name)
     img.load()
-    img_array = np.asarray(img, dtype="int32")
+    img_array = np.asarray(img, dtype="float32")
     return img_array
 
 config_file = "examples/FairFace/configs/preprocess_fairface_race.json"
@@ -26,7 +26,7 @@ makedirs([data_out_dir])
 
 protected_variable = config["variable"]
 batch_size = 128
-n_random_per_class = 200
+n_random_per_class = 10*batch_size
 
 for data_split_subset in ["train"]:#, "val"]:
     raw_data_path = os.path.join(data_base_dir, data_split_subset)
@@ -71,7 +71,7 @@ for data_split_subset in ["train"]:#, "val"]:
 
             batch_name = 'batch' + str(batch_id).zfill(4)
             np.save(os.path.join(data_out_dir, batch_name), image_batch)
-            corpus_file_content.append([batch_name + '.npy', str(c_id), c_name])
+            corpus_file_content.append([batch_name + '.npy', c_name, str(c_id)])
 
             batch_start_idx = batch_start_idx + batch_size
             batch_id = batch_id + 1

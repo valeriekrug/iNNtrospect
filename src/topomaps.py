@@ -85,7 +85,7 @@ def compute_and_save_layer_topomap_layouts(values_dir, output_dir, layer, layout
     nap = np.load(os.path.join(values_dir, layer_id + ".npy"))
     nap_shape = nap.shape
 
-    if nap_shape[-1] > 1:
+    if nap_shape[-1] > 15:
         # flattened profile per channel - each column contains nap values of one output channel, all groups stacked
         flat_channel_profile = np.transpose(np.reshape(nap,
                                                        [np.prod(nap_shape[:-1]), nap_shape[-1]]
@@ -104,7 +104,7 @@ def compute_and_save_layer_topomap_layouts(values_dir, output_dir, layer, layout
 
         np.save(output_path, coordinates)
     else:
-        print("skipping", layer_id, "- no channels to compute layout for")
+        print("skipping", layer_id, "- too few channels to compute layout for")
 
 
 def compute_topomap_layout(processed_corpus_path,
