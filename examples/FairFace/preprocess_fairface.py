@@ -44,10 +44,6 @@ for data_split_subset in ["train"]:#, "val"]:
     class_idx_to_name = np.array([s.split(';') for s in class_idx_and_names])
     # class_idx_to_name = dict(zip(class_idx_to_name[:,0],class_idx_to_name[:,1]))
 
-    # TODO NEXT, for each class, pick n random examples, build batch, save batch and add to corpus
-
-    # im_arr = image_path_to_numpy(os.path.join(data_base_dir,label_df["file"][0]))
-
     corpus_file_content = []
     batch_id = 0
     for c_id, c_name in class_idx_to_name:
