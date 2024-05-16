@@ -1,8 +1,6 @@
 # script for performing iNNtrospection
 # fixed instances of this script go to examples
 
-# from env_setup import local_env_settings
-# local_env_settings()
 
 import json
 from src.naps import compute_contrastive_naps

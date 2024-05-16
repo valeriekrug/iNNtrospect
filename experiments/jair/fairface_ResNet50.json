@@ -1,0 +1,27 @@
+{
+  "model_path": null,
+  "model_name": "ResNet50",
+  "layer_names_of_interest": [
+    "pool1_pool",
+    "conv2_block1_out",
+    "conv2_block2_out",
+    "conv2_block3_out",
+    "conv3_block1_out",
+    "conv3_block2_out",
+    "conv3_block3_out",
+    "conv3_block4_out",
+    "conv4_block1_out",
+    "conv4_block2_out",
+    "conv4_block3_out",
+    "conv4_block4_out",
+    "conv4_block5_out",
+    "conv4_block6_out",
+    "conv5_block1_out",
+    "conv5_block2_out",
+    "conv5_block3_out",
+    "avg_pool"
+  ],
+  "data_path": "processed_data/fairface/",
+  "processed_corpus_path": "output/fairface/ResNet50/",
+  "use_aligned_naps": false
+}

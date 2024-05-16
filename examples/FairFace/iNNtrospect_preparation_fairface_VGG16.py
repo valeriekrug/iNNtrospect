@@ -1,6 +1,4 @@
 
-from env_setup import local_env_settings
-local_env_settings()
 
 import json
 

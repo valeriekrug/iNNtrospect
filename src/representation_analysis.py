@@ -10,6 +10,22 @@ from src.checks import check_pipeline_dependencies, check_group_names_of_interes
 from src.data_processing import get_n_layers
 from src.utils import makedirs
 
+def group_names_to_indices(processed_corpus_path, group_names_of_interest):
+    with open(os.path.join(processed_corpus_path, "group_name_to_index.json"), "r") as f:
+        group_name_to_index = json.load(f)
+
+    group_names_of_interest = check_group_names_of_interest(processed_corpus_path, group_names_of_interest)
+
+    indices_of_interest = list()
+    contrastive_nap_group_names = list()
+
+    for group_name in group_names_of_interest:
+        if group_name in group_name_to_index.keys():
+            indices_of_interest.append(int(group_name_to_index[group_name]))
+            contrastive_nap_group_names.append(group_name)
+    contrastive_nap_group_names = np.array(contrastive_nap_group_names)
+    indices_of_interest = np.array(indices_of_interest)
+    return contrastive_nap_group_names, indices_of_interest
 
 def stack_and_flat_batch_activations(processed_corpus_path, output_dir, group_names_of_interest, layer, n_batches_per_group):
     activations = []

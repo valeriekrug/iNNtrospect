@@ -18,7 +18,9 @@ pipeline_dir_input_dependencies = {
     "topomap_layout_contrastive": [OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS],
     "topomap_activations": [OUTPUT_DIRECTORY_NAMES.NAPS],
     "topomap_activations_contrastive": [OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS],
-    "topomap_plots": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA]
+    "topomap_plots": [OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA],
+    "representation_cluster_data": [OUTPUT_DIRECTORY_NAMES.ACTS],
+    "representation_cluster_plots": [OUTPUT_DIRECTORY_NAMES.REPRESENTATION_CLUSTER_DATA]
 }
 
 assure_sync = True
@@ -32,7 +34,9 @@ pipeline_dir_async_effects = {
                    OUTPUT_DIRECTORY_NAMES.INSTANCE_PROJECTION_DATA,
                    OUTPUT_DIRECTORY_NAMES.INSTANCE_PROJECTION_PLOTS,
                    OUTPUT_DIRECTORY_NAMES.TOPOMAP_DATA,
-                   OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS],
+                   OUTPUT_DIRECTORY_NAMES.TOPOMAP_PLOTS,
+                   OUTPUT_DIRECTORY_NAMES.REPRESENTATION_CLUSTER_DATA,
+                   OUTPUT_DIRECTORY_NAMES.REPRESENTATION_CLUSTER_PLOTS],
     "align": [OUTPUT_DIRECTORY_NAMES.ALIGNED,
               OUTPUT_DIRECTORY_NAMES.NAPS,
               OUTPUT_DIRECTORY_NAMES.CONTRASTIVE_NAPS,

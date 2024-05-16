@@ -11,3 +11,5 @@ class PIPELINE_STEPS:
     TOPOMAP_ACTIVATIONS = "topomap_activations"
     TOPOMAP_ACTIVATIONS_CONTRASTIVE = "topomap_activations_contrastive"
     TOPOMAP_PLOTS = "topomap_plots"
+    REPRESENTATION_CLUSTER_DATA = "representation_cluster_data"
+    REPRESENTATION_CLUSTER_PLOTS = "representation_cluster_plots"

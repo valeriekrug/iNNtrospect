@@ -1,5 +1,4 @@
-# from env_setup import local_env_settings
-# local_env_settings()
+
 
 from constants.topomap_constants import TOPOMAP_METHODS, TOPOMAP_PLOTTING_MODES
 from src.data_processing import process_corpus_file, align_data

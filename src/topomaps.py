@@ -11,6 +11,7 @@ from constants.check_constants import PIPELINE_STEPS
 from constants.directory_constants import OUTPUT_DIRECTORY_NAMES
 from src.checks import check_pipeline_dependencies
 from src.data_processing import get_n_layers
+from src.representation_analysis import group_names_to_indices
 from src.utils import makedirs, tanh, zero_one_feature_scaling
 
 
@@ -78,11 +79,20 @@ def get_nap_dir(processed_corpus_path, from_contrastive_naps):
 
     return nap_dir
 
-def compute_and_save_layer_topomap_layouts(values_dir, output_dir, layer, layouting_function, distribute_in_circle):
+def compute_and_save_layer_topomap_layouts(values_dir,
+                                           output_dir,
+                                           layer,
+                                           layouting_function,
+                                           distribute_in_circle,
+                                           group_subset_idx=None):
 
     layer_id = "layer" + str(layer).zfill(3)
 
     nap = np.load(os.path.join(values_dir, layer_id + ".npy"))
+
+    if group_subset_idx is not None:
+        nap = nap[group_subset_idx]
+
     nap_shape = nap.shape
 
     if nap_shape[-1] > 15:
@@ -110,7 +120,8 @@ def compute_and_save_layer_topomap_layouts(values_dir, output_dir, layer, layout
 def compute_topomap_layout(processed_corpus_path,
                            layouting_method="UMAP",
                            distribute_in_circle=True,
-                           from_contrastive_naps=None):
+                           from_contrastive_naps=None,
+                           group_subset=None):
 
     if from_contrastive_naps:
         check_pipeline_dependencies(processed_corpus_path, PIPELINE_STEPS.TOPOMAP_LAYOUT_CONTRASTIVE)
@@ -128,11 +139,24 @@ def compute_topomap_layout(processed_corpus_path,
 
     layouting_function = layouting_method_to_function[layouting_method]
 
+    if group_subset is not None:
+        _, indices_of_interest = group_names_to_indices(processed_corpus_path,
+                                                        group_subset)
+    else:
+        indices_of_interest = None
+
     for layer in range(n_layers - 1):
-        compute_and_save_layer_topomap_layouts(nap_dir, topomap_output_dir, layer, layouting_function, distribute_in_circle)
+        compute_and_save_layer_topomap_layouts(nap_dir,
+                                               topomap_output_dir,
+                                               layer,
+                                               layouting_function,
+                                               distribute_in_circle,
+                                               indices_of_interest)
 
 
-def compute_and_save_layer_topomap_activations(values_dir, output_dir, layer):
+def compute_and_save_layer_topomap_activations(values_dir,
+                                               output_dir,
+                                               layer):
 
     layer_id = "layer" + str(layer).zfill(3)
 
@@ -170,4 +194,6 @@ def compute_topomap_activations(processed_corpus_path, from_contrastive_naps=Non
     nap_dir = get_nap_dir(processed_corpus_path, from_contrastive_naps)
 
     for layer in range(n_layers - 1):
-        compute_and_save_layer_topomap_activations(nap_dir, topomap_output_dir, layer)
+        compute_and_save_layer_topomap_activations(nap_dir,
+                                                   topomap_output_dir,
+                                                   layer)

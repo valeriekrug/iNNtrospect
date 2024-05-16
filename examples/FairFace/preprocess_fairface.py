@@ -1,5 +1,4 @@
-# from env_setup import local_env_settings
-# local_env_settings()
+
 
 from src.utils import makedirs
 import os
@@ -57,7 +56,7 @@ for data_split_subset in ["train"]:#, "val"]:
         while batch_start_idx < n_random_per_class:
             # load (up to) batch_size examples
 
-            class_example_ids_batch = class_example_ids[batch_start_idx:batch_start_idx+batch_size]
+            class_example_ids_batch = random_class_ids[batch_start_idx:batch_start_idx+batch_size]
             image_batch = list()
             for class_example_id in class_example_ids_batch:
                 image_array = image_path_to_numpy(os.path.join(data_base_dir,

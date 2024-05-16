@@ -1,0 +1,22 @@
+{
+  "model_path": null,
+  "model_name": "InceptionV3",
+  "layer_names_of_interest": [
+    "max_pooling2d_1",
+    "mixed0",
+    "mixed1",
+    "mixed2",
+    "mixed3",
+    "mixed4",
+    "mixed5",
+    "mixed6",
+    "mixed7",
+    "mixed8",
+    "mixed9",
+    "mixed10",
+    "avg_pool"
+  ],
+  "data_path": "processed_data/fairface/",
+  "processed_corpus_path": "output/fairface/InceptionV3/",
+  "use_aligned_naps": false
+}

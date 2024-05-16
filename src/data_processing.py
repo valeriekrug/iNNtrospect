@@ -30,8 +30,13 @@ def create_acts_grads_output_dirs(output_path, n_layers, with_aligned=False):
             paths_to_make.append(layer_output_aln_path)
         makedirs(paths_to_make)
 
-def get_acts_and_grads_of_batch(model, batch):
+def get_acts_and_grads_of_batch(model, batch, preprocessing_fun):
     batch = tf.convert_to_tensor(batch)
+
+    model_input_shape = model.input_shape[1:3]
+    batch = tf.image.resize(batch,model_input_shape)
+
+    batch = preprocessing_fun(batch)
 
     with tf.GradientTape() as tape:
         tape.watch(batch)

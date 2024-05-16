@@ -1,9 +1,6 @@
 # script for running a preprocessing pipeline to generate data for iNNtrospection
 # fixed instances of this script go to examples
 
-# from env_setup import local_env_settings
-# local_env_settings()
-
 import json
 from src.data_processing import process_corpus_file, align_data
 from src.model import load_model, create_model_with_layer_outputs

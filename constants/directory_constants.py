@@ -8,3 +8,5 @@ class OUTPUT_DIRECTORY_NAMES:
     CONTRASTIVE_NAPS = "contrastive_naps"
     TOPOMAP_DATA = "vis_data/topomap"
     TOPOMAP_PLOTS = "plots/topomap"
+    REPRESENTATION_CLUSTER_DATA = "vis_data/representation_cluster"
+    REPRESENTATION_CLUSTER_PLOTS = "plots/representation_cluster"

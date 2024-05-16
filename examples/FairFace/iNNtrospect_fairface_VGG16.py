@@ -1,6 +1,4 @@
 from constants.topomap_constants import TOPOMAP_METHODS, TOPOMAP_PLOTTING_MODES
-from env_setup import local_env_settings
-local_env_settings()
 
 import json
 

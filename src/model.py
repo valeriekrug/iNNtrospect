@@ -10,11 +10,17 @@ def load_model(path):
     model = keras.models.load_model(path)
     return model
 
-name_to_model = {"VGG16":  keras.applications.vgg16.VGG16}
+name_to_model = {"VGG16":  keras.applications.vgg16.VGG16,
+                 "ResNet50": keras.applications.resnet.ResNet50,
+                 "InceptionV3": keras.applications.inception_v3.InceptionV3}
 
+name_to_preprocessing_fun =  {"VGG16":  keras.applications.vgg16.preprocess_input,
+                 "ResNet50": keras.applications.resnet.preprocess_input,
+                 "InceptionV3": keras.applications.inception_v3.preprocess_input}
 def load_imagenet_pretrained_model(model_name):
     model = name_to_model[model_name]()
-    return model
+    preprocessing_fun = name_to_preprocessing_fun[model_name]
+    return model, preprocessing_fun
 
 def get_layer_outputs_of_interest(model_layers, layer_names_of_interest):
     model_layer_outputs_of_interest = []
