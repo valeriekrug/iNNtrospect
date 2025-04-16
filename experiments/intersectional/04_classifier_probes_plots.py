@@ -8,7 +8,8 @@ import pickle
 import matplotlib.pyplot as plt
 import numpy as np
 
-probe_experiment_dir = '/project/ankrug/iNNtrospect/experiments/jair/classifier_probes'
+# set directory
+probe_experiment_dir = "probes/intersectional/"
 
 dir_files = os.listdir(probe_experiment_dir)
 for model_name in ["VGG16", "ResNet50", "InceptionV3"]:

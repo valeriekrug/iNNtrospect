@@ -11,10 +11,14 @@ from tqdm import tqdm
 _, model_name, layer = sys.argv
 print(model_name, layer)
 
-classifier_probes_data_file = '/project/ankrug/iNNtrospect/experiments/jair/classifier_probes_data.pkl'
+probe_base_path = "probes/intersectional/"
+
+classifier_probes_data_file = probe_base_path + 'classifier_probes_data.pkl'
+
+activations_dir = "output/fairface/" + model_name + "/acts/" + layer
 
 if not os.path.isfile(classifier_probes_data_file):
-    corpus_dir = "/project/ankrug/iNNtrospect/processed_data/fairface/"
+    corpus_dir = "processed_data/fairface/"
     corpus_file = os.path.join(corpus_dir, "corpus.csv")
     batches = []
     batch_labels = []
@@ -58,8 +62,6 @@ else:
 
 # make data_info to training data
 print("building data")
-
-activations_dir = "/project/ankrug/iNNtrospect/output/fairface/" + model_name + "/acts/" + layer
 
 subsample_mode = "pooling"
 if subsample_mode not in ["pooling", "grid"]:
@@ -138,10 +140,10 @@ valid_preds = np.argmax(model(valid_data), 1)
 valid_confusion = confusion_matrix(valid_labels, valid_preds,
                                    labels=np.arange(126))
 confusion = np.stack([training_confusion, valid_confusion])
-np.save('/project/ankrug/iNNtrospect/experiments/jair/classifier_probes/' + model_name + '_' + layer + '_confusion.npy',
+np.save(probe_base_path + model_name + '_' + layer + '_confusion.npy',
         confusion)
 
 training_history = outputs.history
-with open('/project/ankrug/iNNtrospect/experiments/jair/classifier_probes/' + model_name + '_' + layer + '_history.pkl',
+with open(probe_base_path + model_name + '_' + layer + '_history.pkl',
           'wb') as f:
     pickle.dump(training_history, f, protocol=pickle.HIGHEST_PROTOCOL)
